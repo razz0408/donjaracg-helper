@@ -4,14 +4,25 @@ on: [push]
 
 jobs:
   publish:
-    runs-on: ubuntu-20.04
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        node-version: [19.x]
     permissions:
       contents: read
       deployments: write
     steps:
       - name: Checkout
         uses: actions/checkout@v3
-     
+        
+      - name: Use Node.js ${{ matrix.node-version }}
+        uses: actions/setup-node@v3
+        with:
+          node-version: ${{ matrix.node-version }}
+          
+      - run: npm ci
+      - run: npm run build --if-present
+           
       - name: Publish to Cloudflare Pages
         uses: cloudflare/pages-action@1
         with:
