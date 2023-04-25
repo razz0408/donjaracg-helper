@@ -1,0 +1,247 @@
+{
+  "idol_data": [
+    {
+      "cgid": 1,
+      "name": "島村卯月",
+      "furigana": "しまむら うづき",
+      "voice": "大橋彩香",
+      "type": "cute",
+      "image": "1001.png",
+      "first_status": "Vi"
+    },
+    {
+      "cgid": 2,
+      "name": "中野有香",
+      "furigana": "なかの ゆか",
+      "voice": "下地紫野",
+      "type": "cute",
+      "image": "1040.png",
+      "first_status": "Vi"
+    },
+    {
+      "cgid": 3,
+      "name": "水本ゆかり",
+      "furigana": "みずもと ゆかり",
+      "voice": "藤田茜",
+      "type": "cute",
+      "image": "1098.png",
+      "first_status": "Vo"
+    },
+    {
+      "cgid": 5,
+      "name": "椎名法子",
+      "furigana": "しいな のりこ",
+      "voice": "都丸ちよ",
+      "type": "cute",
+      "image": "1014.png",
+      "first_status": "Vi"
+    },
+    {
+      "cgid": 8,
+      "name": "三村かな子",
+      "furigana": "みむら かなこ",
+      "voice": "大坪由佳",
+      "type": "cute",
+      "image": "1011.png",
+      "first_status": "Vo"
+    },
+    {
+      "cgid": 11,
+      "name": "小日向美穂",
+      "furigana": "こひなた みほ",
+      "voice": "津田美波",
+      "type": "cute",
+      "image": "1002.png",
+      "first_status": "Da"
+    },
+    {
+      "cgid": 12,
+      "name": "緒方智絵里",
+      "furigana": "おがた ちえり",
+      "voice": "大空直美",
+      "type": "cute",
+      "image": "1051.png",
+      "first_status": "Vi"
+    },
+    {
+      "cgid": 13,
+      "name": "五十嵐響子",
+      "furigana": "いがらし きょうこ",
+      "voice": "種﨑敦美",
+      "type": "cute",
+      "image": "1061.png",
+      "first_status": "Vo"
+    },
+    {
+      "cgid": 15,
+      "name": "櫻井桃華",
+      "furigana": "さくらい ももか",
+      "voice": "照井春佳",
+      "type": "cute",
+      "image": "1034.png",
+      "first_status": "Da"
+    },
+    {
+      "cgid": 19,
+      "name": "関裕美",
+      "furigana": "せき ひろみ",
+      "voice": "会沢紗弥",
+      "type": "cute",
+      "image": "1097.png",
+      "first_status": "Da"
+    },
+    {
+      "cgid": 22,
+      "name": "藤本里奈",
+      "furigana": "ふじもと りな",
+      "voice": "金子真由美",
+      "type": "cute",
+      "image": "1128.png",
+      "first_status": "Vo"
+    },
+    {
+      "cgid": 24,
+      "name": "遊佐こずえ",
+      "furigana": "ゆさ こずえ",
+      "voice": "花谷麻妃",
+      "type": "cute",
+      "image": "1099.png",
+      "first_status": "Vi"
+    },
+    {
+      "cgid": 26,
+      "name": "一ノ瀬志希",
+      "furigana": "いちのせ しき",
+      "voice": "藍原ことみ",
+      "type": "cute",
+      "image": "1043.png",
+      "first_status": "Vo"
+    },
+    {
+      "cgid": 27,
+      "name": "前川みく",
+      "furigana": "まえかわ みく",
+      "voice": "高森奈津美",
+      "type": "cute",
+      "image": "1013.png",
+      "first_status": "Vi"
+    },
+    {
+      "cgid": 31,
+      "name": "宮本フレデリカ",
+      "furigana": "みやもと ふれでりか",
+      "voice": "髙野麻美",
+      "type": "cute",
+      "image": "1015.png",
+      "first_status": "Da"
+    },
+    {
+      "cgid": 32,
+      "name": "小早川紗枝",
+      "furigana": "こばやかわ さえ",
+      "voice": "立花理香",
+      "type": "cute",
+      "image": "1044.png",
+      "first_status": "Vi"
+    },
+    {
+      "cgid": 34,
+      "name": "双葉杏",
+      "furigana": "ふたば あんず",
+      "voice": "五十嵐裕美",
+      "type": "cute",
+      "image": "1092.png",
+      "first_status": "Da"
+    },
+    {
+      "cgid": 41,
+      "name": "道明寺歌鈴",
+      "furigana": "どうみょうじ かりん",
+      "voice": "新田ひより",
+      "type": "cute",
+      "image": "1062.png",
+      "first_status": "Vi"
+    },
+    {
+      "cgid": 46,
+      "name": "輿水幸子",
+      "furigana": "こしみず さちこ",
+      "voice": "竹達彩奈",
+      "type": "cute",
+      "image": "1028.png",
+      "first_status": "Da"
+    },
+    {
+      "cgid": 50,
+      "name": "安部菜々",
+      "furigana": "あべ なな",
+      "voice": "三宅麻理恵",
+      "type": "cute",
+      "image": "1022.png",
+      "first_status": "Da"
+    },
+    {
+      "cgid": 55,
+      "name": "佐久間まゆ",
+      "furigana": "さくま まゆ",
+      "voice": "牧野由依",
+      "type": "cute",
+      "image": "1037.png",
+      "first_status": "Vi"
+    },
+    {
+      "cgid": 57,
+      "name": "白菊ほたる",
+      "furigana": "しらぎく ほたる",
+      "voice": "天野聡美",
+      "type": "cute",
+      "image": "1069.png",
+      "first_status": "Vo"
+    },
+    {
+      "cgid": 58,
+      "name": "早坂美玲",
+      "furigana": "はやさか みれい",
+      "voice": "朝井彩加",
+      "type": "cute",
+      "image": "1070.png",
+      "first_status": "Da"
+    },
+    {
+      "cgid": 60,
+      "name": "乙倉悠貴",
+      "furigana": "おとくら ゆうき",
+      "voice": "中島由貴",
+      "type": "cute",
+      "image": "1072.png",
+      "first_status": "Vo"
+    },
+    {
+      "cgid": 63,
+      "name": "辻野あかり",
+      "furigana": "つじの あかり",
+      "voice": "梅澤めぐ",
+      "type": "cute",
+      "image": "1187.png",
+      "first_status": "Da"
+    },
+    {
+      "cgid": 64,
+      "name": "黒埼ちとせ",
+      "furigana": "くろさき ちとせ",
+      "voice": "佐倉薫",
+      "type": "cute",
+      "image": "1190.png",
+      "first_status": "Vo"
+    },
+    {
+      "cgid": 65,
+      "name": "白雪千夜",
+      "furigana": "しらゆき ちよ",
+      "voice": "関口理咲",
+      "type": "cute",
+      "image": "1191.png",
+      "first_status": "Vo"
+    }
+  ]
+}

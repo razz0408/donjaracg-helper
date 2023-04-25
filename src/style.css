@@ -1,0 +1,433 @@
+html {
+  scroll-behavior: smooth;
+}
+
+:root {
+  font-family: Inter, system-ui, Avenir, Helvetica, Arial, sans-serif;
+  line-height: 1.5;
+  font-weight: 400;
+  font-synthesis: none;
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  -webkit-text-size-adjust: 100%;
+}
+
+body {
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  place-items: center;
+  min-width: 320px;
+  min-height: 100vh;
+}
+
+h1 {
+  font-size: 3.2em;
+}
+
+button {
+  border-radius: 8px;
+  border: 1px solid transparent;
+  padding: 0.6em 1.2em;
+  font-size: 1em;
+  font-weight: 500;
+  font-family: inherit;
+  cursor: pointer;
+  transition: border-color 0.25s;
+}
+button:hover {
+  border-color: #646cff;
+}
+button:focus, button:focus-visible {
+  outline: 4px auto -webkit-focus-ring-color;
+}
+
+.card {
+  padding: 2em;
+}
+
+:root {
+  color: #213547;
+  background-color: #ffffff;
+}
+
+a:hover {
+  color: #747bff;
+}
+
+button {
+  background-color: #f9f9f9;
+}
+
+table, th, td {
+  border: 1px solid black;
+  border-collapse: collapse;
+  padding: 1em;
+}
+
+footer {
+  margin-top: 15px;
+  width: 100%;
+  padding-left: 5%;
+  box-sizing: border-box;
+  border-radius: 10px 10px 0px 0px;
+  background-color: rgba(200, 200, 200, 0.7);
+}
+footer .btn-page-top {
+  position: fixed;
+  right: 15px;
+  bottom: 15px;
+  width: 60px;
+  height: 60px;
+  background: rgba(100, 100, 100, 0.7);
+  cursor: pointer;
+  transition: 0.3s;
+  border-radius: 5px;
+}
+footer .btn-page-top::before {
+  content: "";
+  position: absolute;
+  top: 4px;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  width: 18px;
+  height: 18px;
+  margin: auto;
+  border-top: 6px solid #000;
+  border-left: 6px solid #000;
+  transform: rotate(45deg);
+  box-sizing: border-box;
+}
+footer p, footer li {
+  font-size: 14px;
+  color: rgba(0, 0, 0, 0.87);
+}
+footer .link ul {
+  margin: 0;
+}
+
+.component.component-idols {
+  padding: 5px;
+  border-radius: 10px;
+  background-color: rgba(38, 129, 200, 0.5);
+  display: flex;
+  overflow-x: auto;
+}
+.component.component-idols .idol-card {
+  -webkit-user-select: none;
+     -moz-user-select: none;
+          user-select: none;
+}
+.component .idol-card [data-type=cute] {
+  background-color: #ef7fb2;
+}
+.component .idol-card [data-type=cool] {
+  background-color: #5da1ff;
+}
+.component .idol-card [data-type=passion] {
+  background-color: #ffc249;
+}
+.component .idol-card .idol-detail {
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  align-items: center;
+}
+.component .idol-card .idol-detail .idol-petit img {
+  width: 100%;
+  height: 100%;
+  user-drag: none;
+  -webkit-user-drag: none;
+  -moz-user-select: none;
+}
+.component .idol-card .idol-detail .idol-furigana {
+  color: rgba(17, 17, 17, 0.7);
+  margin: 0;
+}
+.component .idol-card .idol-detail .idol-name {
+  color: rgba(17, 17, 17, 0.9);
+  margin: 0;
+}
+.component .unit-card .unit-detail {
+  margin-left: auto;
+  margin-right: auto;
+  margin-bottom: 5px;
+  width: -moz-fit-content;
+  width: fit-content;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  padding-top: 3px;
+  padding-bottom: 3px;
+  padding-left: 10px;
+  padding-right: 10px;
+  border-radius: 10px;
+  background-color: rgba(255, 255, 255, 0.3);
+}
+.component .unit-card .unit-detail p {
+  width: -moz-fit-content;
+  width: fit-content;
+}
+.component .unit-card .unit-detail .unit-furigana {
+  color: rgba(17, 17, 17, 0.7);
+}
+.component .unit-card .unit-detail .unit-name {
+  color: rgba(17, 17, 17, 0.9);
+}
+.component .unit-card .unit-detail .song-unit {
+  color: rgba(17, 17, 17, 0.7);
+}
+.component .unit-card .unit-members {
+  padding: 5px;
+  border-radius: 10px;
+  background-color: rgba(34, 92, 173, 0.5);
+}
+.component .unit-card .unit-members .idol-card .idol-detail {
+  border-radius: 10px;
+}
+@media screen and (min-width: 769px) {
+  .sp-only {
+    display: none;
+  }
+  body {
+    max-width: 1280px;
+    margin: 0 auto;
+  }
+  #app {
+    padding-left: 15px;
+    padding-right: 15px;
+    box-sizing: border-box;
+    width: 100%;
+    max-width: 1280px;
+    margin: 0 auto;
+    text-align: center;
+  }
+  .container {
+    width: 100%;
+    box-sizing: border-box;
+    padding: 20px;
+    border-radius: 10px;
+    background-color: rgba(38, 129, 200, 0.5);
+  }
+  .container + .container {
+    margin-top: 15px;
+  }
+  .container .container-title p {
+    text-align: center;
+    margin: 0;
+    font-weight: 600;
+    color: rgb(0, 0, 0);
+    font-size: 20px;
+  }
+  .container .filter {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    border-radius: 10px;
+  }
+  .container .filter p {
+    text-align: left;
+    margin: 0;
+    font-weight: 600;
+    color: rgb(0, 0, 0);
+  }
+  .container .filter input {
+    width: 43%;
+    border-radius: 10px;
+    padding-left: 10px;
+    padding-right: 10px;
+  }
+  .container .component {
+    margin-top: 10px;
+    padding-bottom: 5px;
+  }
+  .container .component.component-idols {
+    min-height: 270px;
+    gap: 10px;
+  }
+  .container .component.component-idols .idol-card {
+    min-width: 170px;
+    max-width: 170px;
+  }
+  .container .component.component-idols .idol-card .idol-detail {
+    padding-top: 5px;
+    padding-left: 5px;
+    padding-right: 5px;
+    padding-bottom: 5px;
+    border-radius: 12px;
+  }
+  .container .component.component-idols .idol-card .idol-detail .idol-furigana {
+    font-size: 12px;
+  }
+  .container .component.component-idols .idol-card .idol-detail .idol-name {
+    font-size: 18px;
+  }
+  .container .component .unit-card {
+    display: flex;
+    flex-direction: column;
+  }
+  .container .component .unit-card + .unit-card {
+    margin-top: 10px;
+  }
+  .container .component .unit-card .unit-detail .unit-furigana {
+    font-size: 13px;
+  }
+  .container .component .unit-card .unit-detail .unit-name {
+    font-size: 17px;
+  }
+  .container .component .unit-card .unit-detail .song-unit {
+    font-size: 15px;
+  }
+  .container .component .unit-card .unit-members {
+    display: flex;
+    flex-flow: row;
+    gap: 5px;
+    width: 100%;
+    flex-wrap: nowrap;
+    overflow-x: auto;
+  }
+  .container .component .unit-card .unit-members .idol-card {
+    min-width: 110px;
+    max-width: 110px;
+    max-height: 200px;
+  }
+  .container .component .unit-card .unit-members .idol-card:first-child {
+    margin-left: auto;
+  }
+  .container .component .unit-card .unit-members .idol-card:last-child {
+    margin-right: auto;
+  }
+  .container .component .unit-card .unit-members .idol-card .idol-detail {
+    padding: 3px;
+  }
+  .container .component .unit-card .unit-members .idol-card .idol-detail .idol-furigana {
+    font-size: 10px;
+  }
+  .container .component .unit-card .unit-members .idol-card .idol-detail .idol-name {
+    font-size: 13px;
+  }
+}
+@media screen and (max-width: 768px) {
+  .pc-only {
+    display: none;
+  }
+  #app {
+    width: 100%;
+    margin: 0 auto;
+    padding: 1rem;
+    text-align: center;
+  }
+  #app {
+    max-width: 100%;
+  }
+  #app h1 {
+    font-size: 30px;
+  }
+  .container {
+    min-width: 320px;
+    padding-top: 5px;
+    padding-left: 10px;
+    padding-right: 10px;
+    padding-bottom: 10px;
+    border-radius: 10px;
+    background-color: rgba(38, 129, 200, 0.5);
+  }
+  .container + .container {
+    margin-top: 15px;
+  }
+  .container .container-title p {
+    text-align: center;
+    margin: 0;
+    font-weight: 600;
+    color: rgb(0, 0, 0);
+    font-size: 20px;
+  }
+  .container .filter {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    border-radius: 10px;
+  }
+  .container .filter p {
+    text-align: left;
+    margin: 0;
+    font-weight: 600;
+    color: rgb(0, 0, 0);
+  }
+  .container .filter input {
+    width: 90%;
+    border-radius: 10px;
+    padding-left: 10px;
+    padding-right: 10px;
+  }
+  .container .component {
+    margin-top: 10px;
+    padding-bottom: 5px;
+  }
+  .container .component.component-idols {
+    min-height: 240px;
+    gap: 30px;
+  }
+  .container .component.component-idols .idol-card {
+    min-width: 130px;
+    max-width: 130px;
+  }
+  .container .component.component-idols .idol-card .idol-detail {
+    padding-top: 5px;
+    padding-left: 5px;
+    padding-right: 5px;
+    padding-bottom: 5px;
+    border-radius: 12px;
+  }
+  .container .component.component-idols .idol-card .idol-detail .idol-furigana {
+    font-size: 12px;
+  }
+  .container .component.component-idols .idol-card .idol-detail .idol-name {
+    font-size: 16px;
+  }
+  .container .component .unit-card {
+    display: flex;
+    flex-direction: column;
+  }
+  .container .component .unit-card + .unit-card {
+    margin-top: 10px;
+  }
+  .container .component .unit-card .unit-detail .unit-furigana {
+    font-size: 13px;
+  }
+  .container .component .unit-card .unit-detail .unit-name {
+    font-size: 17px;
+  }
+  .container .component .unit-card .unit-detail .song-unit {
+    font-size: 15px;
+  }
+  .container .component .unit-card .unit-members {
+    display: flex;
+    gap: 15px;
+    width: 100%;
+    overflow-x: auto;
+  }
+  .container .component .unit-card .unit-members .idol-card {
+    min-width: 110px;
+    max-width: 110px;
+    max-height: 200px;
+  }
+  .container .component .unit-card .unit-members .idol-card:first-child {
+    margin-left: auto;
+  }
+  .container .component .unit-card .unit-members .idol-card:last-child {
+    margin-right: auto;
+  }
+  .container .component .unit-card .unit-members .idol-card .idol-detail {
+    padding: 5px;
+  }
+  .container .component .unit-card .unit-members .idol-card .idol-detail .idol-furigana {
+    font-size: 10px;
+  }
+  .container .component .unit-card .unit-members .idol-card .idol-detail .idol-name {
+    font-size: 13px;
+  }
+}

@@ -1,0 +1,247 @@
+{
+  "idol_data": [
+    {
+      "cgid": 131,
+      "name": "本田未央",
+      "furigana": "ほんだ みお",
+      "voice": "原紗友里",
+      "type": "passion",
+      "image": "1007.png",
+      "first_status": "Da"
+    },
+    {
+      "cgid": 132,
+      "name": "高森藍子",
+      "furigana": "たかもり あいこ",
+      "voice": "金子有希",
+      "type": "passion",
+      "image": "1023.png",
+      "first_status": "Vi"
+    },
+    {
+      "cgid": 135,
+      "name": "木村夏樹",
+      "furigana": "きむら なつき",
+      "voice": "安野希世乃",
+      "type": "passion",
+      "image": "1020.png",
+      "first_status": "Vo"
+    },
+    {
+      "cgid": 140,
+      "name": "赤城みりあ",
+      "furigana": "あかぎ みりあ",
+      "voice": "黒沢ともよ",
+      "type": "passion",
+      "image": "1008.png",
+      "first_status": "Da"
+    },
+    {
+      "cgid": 143,
+      "name": "大槻唯",
+      "furigana": "おおつき ゆい",
+      "voice": "山下七海",
+      "type": "passion",
+      "image": "1009.png",
+      "first_status": "Vi"
+    },
+    {
+      "cgid": 144,
+      "name": "姫川友紀",
+      "furigana": "ひめかわ ゆき",
+      "voice": "杜野まこ",
+      "type": "passion",
+      "image": "1036.png",
+      "first_status": "Vi"
+    },
+    {
+      "cgid": 148,
+      "name": "及川雫",
+      "furigana": "おいかわ しずく",
+      "voice": "のぐちゆり",
+      "type": "passion",
+      "image": "1142.png",
+      "first_status": "Vi"
+    },
+    {
+      "cgid": 151,
+      "name": "星輝子",
+      "furigana": "ほし しょうこ",
+      "voice": "松田颯水",
+      "type": "passion",
+      "image": "1038.png",
+      "first_status": "Vo"
+    },
+    {
+      "cgid": 152,
+      "name": "片桐早苗",
+      "furigana": "かたぎり さなえ",
+      "voice": "和氣あず未",
+      "type": "passion",
+      "image": "1089.png",
+      "first_status": "Vi"
+    },
+    {
+      "cgid": 153,
+      "name": "堀裕子",
+      "furigana": "ほり ゆうこ",
+      "voice": "鈴木絵理",
+      "type": "passion",
+      "image": "1039.png",
+      "first_status": "Vo"
+    },
+    {
+      "cgid": 155,
+      "name": "的場梨沙",
+      "furigana": "まとば りさ",
+      "voice": "集貝はな",
+      "type": "passion",
+      "image": "1144.png",
+      "first_status": "Vo"
+    },
+    {
+      "cgid": 157,
+      "name": "依田芳乃",
+      "furigana": "よりた よしの",
+      "voice": "高田憂希",
+      "type": "passion",
+      "image": "1096.png",
+      "first_status": "Vi"
+    },
+    {
+      "cgid": 158,
+      "name": "相葉夕美",
+      "furigana": "あいば ゆみ",
+      "voice": "木村珠莉",
+      "type": "passion",
+      "image": "1042.png",
+      "first_status": "Vo"
+    },
+    {
+      "cgid": 162,
+      "name": "城ヶ崎美嘉",
+      "furigana": "じょうがさき みか",
+      "voice": "佳村はるか",
+      "type": "passion",
+      "image": "1058.png",
+      "first_status": "Vo"
+    },
+    {
+      "cgid": 163,
+      "name": "城ヶ崎莉嘉",
+      "furigana": "じょうがさき りか",
+      "voice": "山本希望",
+      "type": "passion",
+      "image": "1025.png",
+      "first_status": "Vi"
+    },
+    {
+      "cgid": 165,
+      "name": "日野茜",
+      "furigana": "ひの あかね",
+      "voice": "赤﨑千夏",
+      "type": "passion",
+      "image": "1019.png",
+      "first_status": "Da"
+    },
+    {
+      "cgid": 166,
+      "name": "諸星きらり",
+      "furigana": "もろぼし きらり",
+      "voice": "松嵜麗",
+      "type": "passion",
+      "image": "1032.png",
+      "first_status": "Vo"
+    },
+    {
+      "cgid": 167,
+      "name": "十時愛梨",
+      "furigana": "ととき あいり",
+      "voice": "原田ひとみ",
+      "type": "passion",
+      "image": "1046.png",
+      "first_status": "Vi"
+    },
+    {
+      "cgid": 168,
+      "name": "ナターリア",
+      "furigana": "なたーりあ",
+      "voice": "生田輝",
+      "type": "passion",
+      "image": "1067.png",
+      "first_status": "Da"
+    },
+    {
+      "cgid": 171,
+      "name": "向井拓海",
+      "furigana": "むかい たくみ",
+      "voice": "原優子",
+      "type": "passion",
+      "image": "1030.png",
+      "first_status": "Da"
+    },
+    {
+      "cgid": 173,
+      "name": "喜多日菜子",
+      "furigana": "きた ひなこ",
+      "voice": "深川芹亜",
+      "type": "passion",
+      "image": "1073.png",
+      "first_status": "Vo"
+    },
+    {
+      "cgid": 180,
+      "name": "難波笑美",
+      "furigana": "なんば えみ",
+      "voice": "伊達朱里紗",
+      "type": "passion",
+      "image": "1113.png",
+      "first_status": "Vo"
+    },
+    {
+      "cgid": 181,
+      "name": "浜口あやめ",
+      "furigana": "はまぐち あやめ",
+      "voice": "田澤茉純",
+      "type": "passion",
+      "image": "1071.png",
+      "first_status": "Da"
+    },
+    {
+      "cgid": 182,
+      "name": "村上巴",
+      "furigana": "むらかみ ともえ",
+      "voice": "花井美春",
+      "type": "passion",
+      "image": "1077.png",
+      "first_status": "Vi"
+    },
+    {
+      "cgid": 186,
+      "name": "佐藤心",
+      "furigana": "さとう しん",
+      "voice": "花守ゆみり",
+      "type": "passion",
+      "image": "1052.png",
+      "first_status": "Da"
+    },
+    {
+      "cgid": 189,
+      "name": "夢見りあむ",
+      "furigana": "ゆめみ りあむ",
+      "voice": "星希成奏",
+      "type": "passion",
+      "image": "1189.png",
+      "first_status": "Da"
+    },
+    {
+      "cgid": 190,
+      "name": "久川凪",
+      "furigana": "ひさかわ なぎ",
+      "voice": "立花日菜",
+      "type": "passion",
+      "image": "1192.png",
+      "first_status": "Da"
+    }
+  ]
+}
