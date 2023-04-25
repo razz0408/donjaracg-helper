@@ -52,8 +52,11 @@ button:focus, button:focus-visible {
   background-color: #ffffff;
 }
 
+a {
+  color: #0066c0;
+}
 a:hover {
-  color: #747bff;
+  color: #0080ff;
 }
 
 button {
@@ -68,11 +71,30 @@ table, th, td {
 
 footer {
   margin-top: 15px;
+  padding-top: 15px;
+  padding-bottom: 5px;
   width: 100%;
-  padding-left: 5%;
   box-sizing: border-box;
   border-radius: 10px 10px 0px 0px;
   background-color: rgba(200, 200, 200, 0.7);
+}
+footer p + p {
+  margin-top: 10px;
+}
+footer .link {
+  margin-top: 10px;
+}
+footer .link p {
+  font-weight: 600;
+}
+footer .link ul {
+  margin-top: 10px;
+}
+footer .link ul li {
+  list-style-type: none;
+}
+footer .link + .copyright {
+  margin-top: 10px;
 }
 footer .btn-page-top {
   position: fixed;
@@ -103,9 +125,6 @@ footer .btn-page-top::before {
 footer p, footer li {
   font-size: 14px;
   color: rgba(0, 0, 0, 0.87);
-}
-footer .link ul {
-  margin: 0;
 }
 
 .component.component-idols {
@@ -235,8 +254,10 @@ footer .link ul {
     color: rgb(0, 0, 0);
   }
   .container .filter input {
-    width: 43%;
+    background-color: #fff;
+    width: 40%;
     border-radius: 10px;
+    margin-top: 5px;
     padding-left: 10px;
     padding-right: 10px;
   }
@@ -358,8 +379,10 @@ footer .link ul {
     color: rgb(0, 0, 0);
   }
   .container .filter input {
+    background-color: #fff;
     width: 90%;
     border-radius: 10px;
+    margin-top: 5px;
     padding-left: 10px;
     padding-right: 10px;
   }
