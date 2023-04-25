@@ -1,0 +1,46 @@
+name: Cloudflare Pages
+
+on: [push]
+
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        node-version: [19.x]
+    permissions:
+      contents: read
+      deployments: write
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+        
+      - name: Use Node.js ${{ matrix.node-version }}
+        uses: actions/setup-node@v3
+        with:
+          node-version: ${{ matrix.node-version }}
+          
+      - name: cache-node-modules
+        uses: actions/cache@v3
+        id: node_modules_cache_id
+        env:
+          cache-name: cache-node-modules
+        with:
+          path: '**/node_modules'
+          key: ${{ runner.os }}-build-${{ env.cache-name }}-${{ hashFiles('**/package-lock.json') }}
+          
+      - name: npm-install
+        if: ${{ steps.node_modules_cache_id.outputs.cache-hit != 'true' }}
+        run: npm i
+        
+      - name: app-build
+        run: npm run build --if-present
+           
+      - name: Publish to Cloudflare Pages
+        uses: cloudflare/pages-action@1
+        with:
+          accountId: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+          apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          projectName: "donjaracghelper"
+          directory: "./dist"
+          gitHubToken: ${{ secrets.GITHUB_TOKEN }}
