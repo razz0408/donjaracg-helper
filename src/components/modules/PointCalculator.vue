@@ -100,15 +100,15 @@ export default {
           }
         }
 
-        if(value === 5) {
+        if(value === 4 || value === 5) {
           for(var unitIdols of this.sliceUnits(unitInHands, value)) {
-
             var generic_unit = this.getGenericUnitData(setCounts.indexOf(1), unitIdols);
+
             if(!this.stageUnits.some(unitObj => unitObj === generic_unit)) {
               this.stageUnits.push(generic_unit);
-              return true;
             }
           }
+          return true;
         }
         
         return false;
@@ -119,6 +119,8 @@ export default {
 
     sliceUnits(array, value) {
       switch(value) {
+        case 4:
+          return [array.slice(0,2), array.slice(2)];
         case 5:
           return [array.slice(0,3), array.slice(3)];
           
@@ -270,6 +272,7 @@ export default {
       return ans;
     },
 
+    // 各属性 + ステータス セット のユニットデータを動的に出力
     getGenericUnitData(index, unitIdols) {
       // [handsCuVi, handsCuDa, handsCuVo, handsCoVi, handsCoDa, handsCoVo, handsPaVi, handsPaDa, handsPaVo]
       var unitName = "ステータスセット ";
@@ -407,24 +410,21 @@ export default {
           
           // 5人ユニ + 2人ユニ + 2人セット
           if(temp_result.some(values => values.includes(true))) {
-            // 和了パターンチェック用
-            var lastUnit = this.stageUnits.slice(-1)[0];
-            var excludeLastUnit = this.getIdolsByNames(this.getExcludeUnitMembers(idols, lastUnit.members.split(',')));
-
-            if(this.checkStatusUnit(excludeLastUnit, 2)) {
+            if(this.checkStatusUnit(rest_idols, 2)) {
               return 36;
-            } else {
-              // ライブスタート可能ではないユニットは除外
-              this.stageUnits = this.stageUnits.filter(unitObj => unitObj !== lastUnit)
-            }
+            } 
           }
 
           // 5人ユニ + 2人セット + 2人セット
           if(idols.length === 4) {
-            
+            if(this.checkStatusUnit(rest_idols, 4)) {
+              return 36;
+            }
           }
         }
       }
+
+      return 0;
     },
 
     // [7] カルテットユニット
@@ -512,6 +512,7 @@ export default {
 
           // 残った牌データを取得
           var rest_idols = this.getIdolsByNames(idols);
+          console.log(rest_idols);
 
           // 4人ユニ + (3人セット + 2人セット)
           if(this.checkStatusUnit(rest_idols, 5)) {
@@ -520,23 +521,16 @@ export default {
 
           // 4人ユニ + 3人ユニ + 2人セット
           if(temp_result.some(values => values[0] === true)) {
-            // 和了パターンチェック用
-            var lastUnit = this.stageUnits.slice(-1)[0];
-            var excludeLastUnit = this.getIdolsByNames(this.getExcludeUnitMembers(idols, lastUnit.members.split(',')));
-
-            if(this.checkStatusUnit(excludeLastUnit, 2)) {
+            if(this.checkStatusUnit(rest_idols, 2)) {
               return 36;
-            } else {
-              // ライブスタート可能ではないユニットは除外
-              this.stageUnits = this.stageUnits.filter(unitObj => unitObj !== lastUnit)
             }
           }
 
           // 4人ユニ + 3人セット + 2人ユニ
           if(temp_result.some(values => values[1] === true)) {
+            // 現在結成可能な2人ユニットのリストを絞り込む
             var tempDuoUnits = this.stageUnits.filter(unitObj => unitObj.members.split(',').length == 2);
-            
-            // ユニット一覧を初期化
+            // ユニット一覧を初期化 (2人ユニットを除外)
             this.stageUnits = this.stageUnits.filter(unitObj => !tempDuoUnits.includes(unitObj));
 
             for(var unit of tempDuoUnits) {
@@ -557,13 +551,24 @@ export default {
           }
         }
       }
+
+      return 0;
     },
 
     checkTrioUnit(idols) {
       // 3人ユニット
-      const units_trio = this.getTrioUnits();
+      const units_trio = this.getTrioUnits()
 
-      console.log("Trio Search")
+      // トリコロールユニットチェック用
+      const units_cute = this.getCuteTrioUnits();
+      const units_cool = this.getCoolTrioUnits();
+      const units_passion = this.getPassionTrioUnits();
+
+      for(var trioUnit of units_trio) {
+        console.log("Trio Search")
+      }
+
+      return 0;
     },
 
     getScore(handIdols) {
@@ -584,24 +589,10 @@ export default {
       var sp_score_b = this.spScoreB;
       var sp_score_c = this.spScoreC;
 
-      // トリコロールユニットチェック用
-      const units_cute = this.getCuteTrioUnits;
-      const units_cool = this.getCoolTrioUnits;
-      const units_passion = this.getPassionTrioUnits;
-
       // 歴代シンデレラガールズ
       const unit_cg = this.getCinderellaGirls().shift();
       // WONDERFUL M@GIC!! / CINDERELLA PROJECT
       const units_magic = this.getMagicUnits();
-
-      // 4人ユニット
-      const units_quartet = this.getQuartetUnits();
-
-      // 3人ユニット
-      const units_trio = this.getTrioUnits();
-
-      // 2人ユニット
-      const units_duo = this.getDuoUnits();
 
       //// ローカル役
       // 9人以上 12人未満 大型ユニット
@@ -677,16 +668,16 @@ export default {
           // [6] 5スターユニット
           // return 36;
           // 5人ユニット + (2人ユニット or 2個セット) * 2
-          var fans = this.checkFiveStarUnits(idols);
-          if (fans !== 0) {
+          fans = this.checkFiveStarUnits(idols);
+          if (fans > 0) {
             return fans;
           }
 
           // [7] カルテットユニット
           // return 36;
           // 4人ユニット + (3人ユニット or 3個セット) + (2人ユニット or 2個セット)
-          var fans = this.checkQuartetUnits(idols);
-          if (fans !== 0) {
+          fans = this.checkQuartetUnits(idols);
+          if (fans > 0) {
             return fans;
           }
 
@@ -698,7 +689,7 @@ export default {
           // return 12;
           // (3人ユニット) + (3人ユニット or 3個セット) * 2
           var fans = this.checkTrioUnit(idols);
-          if (fans !== 0) {
+          if (fans > 0) {
             return fans;
           }
 
