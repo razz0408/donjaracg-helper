@@ -1,0 +1,31 @@
+{
+  "idol_data": [
+    {
+      "cgid": 1001,
+      "name": "オールマイティ",
+      "furigana": "キュート",
+      "voice": "",
+      "type": "cute",
+      "image": "0001.png",
+      "first_status": "All"
+    },
+    {
+      "cgid": 1002,
+      "name": "オールマイティ",
+      "furigana": "クール",
+      "voice": "",
+      "type": "cool",
+      "image": "0002.png",
+      "first_status": "All"
+    },
+    {
+      "cgid": 1003,
+      "name": "オールマイティ",
+      "furigana": "パッション",
+      "voice": "",
+      "type": "passion",
+      "image": "0003.png",
+      "first_status": "All"
+    }
+  ]
+}

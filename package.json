@@ -9,11 +9,14 @@
     "preview": "vite preview"
   },
   "dependencies": {
+    "sass": "^1.62.0",
     "vue": "^3.2.47",
     "vuedraggable": "^4.1.0"
   },
   "devDependencies": {
     "@vitejs/plugin-vue": "^4.1.0",
+    "node-sass": "^8.0.0",
+    "sass-loader": "^13.2.2",
     "vite": "^4.2.0"
   }
 }
