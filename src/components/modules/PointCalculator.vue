@@ -88,7 +88,25 @@ export default {
       
       var setCounts = [setCuVi, setCuDa, setCuVo, setCoVi, setCoDa, setCoVo, setPaVi, setPaDa, setPaVo];
 
-      if(setCounts.some(count => count === 1)) {
+      // 5スターユニット                 / ノーマルライブユニット
+      // 5人ユニ + 2人セット + 2人セット / 3人ユニ + 3人セット + 3人セット
+      if ((idols.length === 4 || idols.length === 6) && !setCounts.every(count => count === 0) && setCounts.filter(num => num === 1).length === 2) {
+        console.log(setCounts);
+        console.log(idols.length);
+        console.log(idols);
+
+        const resultIndexes = setCounts.flatMap((s, i) => (s === 1 ? i : []));
+        console.log(resultIndexes);
+
+        for(var resulitIndex of resultIndexes) {
+          var generic_unit = this.getGenericUnitData(resulitIndex, filteredHands[resulitIndex]);
+
+          if(!this.stageUnits.some(unitObj => unitObj === generic_unit)) {
+            this.stageUnits.push(generic_unit);
+          }
+        }
+        return true;
+      } else if(setCounts.some(count => count === 1)) {
         var unitInHands = filteredHands[setCounts.indexOf(1)];
 
         if(value === 2 || value === 3) {
@@ -100,7 +118,7 @@ export default {
           }
         }
 
-        if(value === 4 || value === 5) {
+        if(value === 4 || value === 5 || value === 6) {
           for(var unitIdols of this.sliceUnits(unitInHands, value)) {
             var generic_unit = this.getGenericUnitData(setCounts.indexOf(1), unitIdols);
 
@@ -122,6 +140,8 @@ export default {
         case 4:
           return [array.slice(0,2), array.slice(2)];
         case 5:
+          return [array.slice(0,3), array.slice(3)];
+        case 6:
           return [array.slice(0,3), array.slice(3)];
           
         default:
@@ -329,6 +349,9 @@ export default {
     // return 36;
     // 5人ユニット + (2人ユニット or 2個セット) * 2
     checkFiveStarUnits(idols) {
+      // 結成済みユニットリストの初期化
+      this.stageUnits = [];
+      
       // 2人ユニット
       const units_duo = this.getDuoUnits();
       // 5人ユニット
@@ -419,6 +442,8 @@ export default {
           if(idols.length === 4) {
             if(this.checkStatusUnit(rest_idols, 4)) {
               return 36;
+            } else if(this.checkStatusUnit(rest_idols, 2)) {
+              return 36;
             }
           }
         }
@@ -431,6 +456,9 @@ export default {
     // return 36;
     // 4人ユニット + (3人ユニット or 3個セット) + (2人ユニット or 2個セット)
     checkQuartetUnits(idols) {
+      // 結成済みユニットリストの初期化
+      this.stageUnits = [];
+
       // 4人ユニット
       const units_quartet = this.getQuartetUnits();
 
@@ -556,16 +584,87 @@ export default {
     },
 
     checkTrioUnit(idols) {
+      // 結成済みユニットリストの初期化
+      this.stageUnits = [];
       // 3人ユニット
-      const units_trio = this.getTrioUnits()
+      const trioUnits = this.getTrioUnits()
 
       // トリコロールユニットチェック用
-      const units_cute = this.getCuteTrioUnits();
-      const units_cool = this.getCoolTrioUnits();
-      const units_passion = this.getPassionTrioUnits();
+      const cuteUnits = this.getCuteTrioUnits();
+      const coolUnits = this.getCoolTrioUnits();
+      const passionUnits = this.getPassionTrioUnits();
 
-      for(var trioUnit of units_trio) {
+      var unitMembers = [];
+      for(var trioUnit of trioUnits) {
         console.log("Trio Search")
+        
+        unitMembers = trioUnit.members.split(',');
+        var isTrioUnit = unitMembers.every(unitMember => idols.includes(unitMember));
+
+        if(isTrioUnit) {
+          // ユニット結成分を除外
+          idols = this.getExcludeUnitMembers(idols, unitMembers);
+          console.log(idols);
+
+          if(!this.stageUnits.some(unitObj => unitObj === trioUnit)) {
+            this.stageUnits.push(trioUnit);
+          }
+
+          if(idols.length === 0) {
+            // 3人ユニ + 3人ユニ + 3人ユニ
+            console.log(this.stageUnits);
+
+            var countCute = this.stageUnits.filter((unit) => cuteUnits.includes(unit)).length;
+            var countCool = this.stageUnits.filter((unit) => coolUnits.includes(unit)).length;
+            var countPassion = this.stageUnits.filter((unit) => passionUnits.includes(unit)).length;
+            
+            if([countCute, countCool, countPassion].every(count => count === 1)) {
+              return 24;
+            } else {
+              return 12;
+            }
+          }
+
+          // 残った牌データを取得
+          var restIdols = this.getIdolsByNames(idols);
+
+          // 3人ユニ + 3人ユニ + 3人セット
+          if(idols.length === 3) {
+            if(this.checkStatusUnit(restIdols, 3)) {
+              this.stageUnits.push(trioUnit);
+              return 12;
+            }
+          }
+
+          if(idols.length === 6) {
+            // 3人ユニ + 3人ユニ + 3人セット
+            for(var trioUnit2 of trioUnits.filter((unitObj) => unitObj !== trioUnit)) {
+              console.log("Trio Search / Group 2")
+              var unitMembers2 = trioUnit2.members.split(',');
+              var isTrioUnit2 = unitMembers2.every(unitMember => idols.includes(unitMember));
+              
+              if(isTrioUnit2) {
+                var excludeIdols2 = this.getExcludeUnitMembers(idols, unitMembers2);
+                console.log(excludeIdols2);
+
+                if(!this.stageUnits.some(unitObj => unitObj === trioUnit)) {
+                  this.stageUnits.push(trioUnit);
+                }
+
+                if(this.checkStatusUnit(restIdols, 3)) {
+                  return 12;
+                }
+              }
+            }
+
+             // 3人ユニ + 3人セット + 3人セット
+            if(this.checkStatusUnit(restIdols, 6)) {
+              return 12;
+            } else if(this.checkStatusUnit(restIdols, 3)) {
+              return 12;
+            }
+          }
+        }
       }
 
       return 0;
@@ -692,7 +791,6 @@ export default {
           if (fans > 0) {
             return fans;
           }
-
 
           // [10] スタートダッシュライブユニット
           // return 6;
