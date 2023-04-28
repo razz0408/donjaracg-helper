@@ -137,6 +137,12 @@
 
 .component {
   .idol-card {
+    &:first-child {
+      margin-left: auto;
+    }
+    &:last-child {
+      margin-right: auto;
+    }
     .idol-detail {
       display: flex;
       flex-direction: column;
