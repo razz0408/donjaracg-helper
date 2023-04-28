@@ -16,12 +16,24 @@
         keyword: '',
         // idolData: [...AlmightyIdols.idol_data, ...CuteIdols.idol_data, ...CoolIdols.idol_data, ...PassionIdols.idol_data],
         idolData: [...CuteIdols.idol_data, ...CoolIdols.idol_data, ...PassionIdols.idol_data],
-
-        targetArray: []
+        filteredIdols: [...CuteIdols.idol_data, ...CoolIdols.idol_data, ...PassionIdols.idol_data],
+        handIdols: [],
       }
     },
-    computed: {
-      filteredIdols: function() {
+    methods: {
+      onDrop() {
+        this.$emit('on-drop', this.handIdols);
+      },
+      checkMove() {
+        if(this.handIdols.length == 9) {
+          return false;
+        } else {
+          return true;
+        }
+      }
+    },
+    watch: {
+      keyword: function() {
         var idols = [];
 
         for(var idol of this.idolData) {
@@ -30,26 +42,16 @@
           }
         }
 
-        // for(var selectedIdol of this.targetArray) {
+        // for(var selectedIdol of this.handIdols) {
         //   if(idols.includes(selectedIdol)) {
         //     var index = idols.indexOf(selectedIdol);
         //     idols.splice(index, 1);
         //   }
         // }
 
+        this.filteredIdols = [...idols];
+
         return idols;
-      }
-    },
-    methods: {
-      onDrop() {
-        this.$emit('on-drop', this.targetArray);
-      },
-      checkMove() {
-        if(this.targetArray.length == 9) {
-          return false;
-        } else {
-          return true;
-        }
       }
     }
   }
@@ -89,7 +91,7 @@
         <p>点数を知りたい手牌</p>
       </div>
 
-      <draggable v-model="targetArray" group="people" item-key="cgid" class="component" @change="onDrop">
+      <draggable v-model="handIdols" group="people" item-key="cgid" class="component" @change="onDrop">
         <template #item="{element}">
           <div class="idol-card">
             <div class="idol-detail" :data-type="element.type">
