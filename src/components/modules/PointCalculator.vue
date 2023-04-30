@@ -11,19 +11,43 @@ import PassionIdols from "../../assets/idol_data_passion.json";
 export default {
   data() {
     return {
+      // ユニットデータ
       unitData: UnitData.unit_data,
+
+      // 各属性アイドルデータ
       cuteIdols: CuteIdols.idol_data,
       coolIdols: CoolIdols.idol_data,
       passionIdols: PassionIdols.idol_data,
+
+      // 全アイドルデータ
       idolData: [...CuteIdols.idol_data, ...CoolIdols.idol_data, ...PassionIdols.idol_data],
+
+      // スコア (ファン人数)
       score: 0,
+      
+      // ローカルルールを適用するか？
       // TODO: 設定で切り替えられるようにする
-      useLocalRule: false,
+      flagUseLocalRule: false,
+
+      // 得点: SPライブセットA (仮) | 例: Project:Krone, ETERNITY MEMORIES, EVERLASTING 
       spScoreA: 60,
+      // 得点: SPライブセットB (仮) | 例: 7人ユニット + (2人ユニット or 2人セット)
       spScoreB: 42,
+      // 得点: SPライブセットC (仮) | 例: 6人ユニット + (3人ユニット or 3人セット)
       spScoreC: 42,
-      type_pattern: ['cute', 'cool', 'passion'],
-      status_pattern: ['Vi', 'Da', 'Vo'],
+
+      // タイプ一覧
+      idolTypeList: ['cute', 'cool', 'passion'],
+      // ステータス一覧
+      idolStatusList: ['Vi', 'Da', 'Vo'],
+
+      // 担当アイドルがいるかどうか
+      flagProduceBonus: false,
+
+      // 和了役 名称
+      liveStartPatternName: "",
+
+      // 和了役 詳細
       stageUnits: []
     }
   },
@@ -93,10 +117,9 @@ export default {
       // 5人ユニ + 2人セット + 2人セット / 3人ユニ + 3人セット + 3人セット / 3人ユニ + 2人ユニ + 2人セット + 2人セット
       if ((idols.length === 4 || idols.length === 6) && !setCounts.every(count => count === 0) && setCounts.filter(num => num === 1).length === 2) {
         const resultIndexes = setCounts.flatMap((s, i) => (s === 1 ? i : []));
-        console.log(resultIndexes);
 
-        for(var resulitIndex of resultIndexes) {
-          var generic_unit = this.getGenericUnitData(resulitIndex, filteredHands[resulitIndex]);
+        for(var resultIndex of resultIndexes) {
+          var generic_unit = this.getGenericUnitData(resultIndex, filteredHands[resultIndex]);
 
           if(!this.stageUnits.some(unitObj => unitObj === generic_unit)) {
             this.stageUnits.push(generic_unit);
@@ -155,10 +178,7 @@ export default {
       // ユニット用に抽出
       for(var idol of handIdols) {
         // オールマイティ除外
-        if(idol.name == "オールマイティ") {
-          // スキップ
-          continue;
-        }
+        if(idol.name == "オールマイティ") continue;
 
         // アイドル名抽出
         idols.push(idol.name);
@@ -169,7 +189,7 @@ export default {
 
     // 手牌の各属性・各ステータスのアイドルを抽出して返す
     getFilteredHands(handIdols, type, status) {
-      if(this.type_pattern.includes(type) && this.status_pattern.includes(status)) {
+      if(this.idolTypeList.includes(type) && this.idolStatusList.includes(status)) {
         return handIdols.filter((idol) => idol.type == type && idol.first_status == status);
       } else {
         return handIdols;
@@ -221,6 +241,11 @@ export default {
     getCinderellaGirls() {
       return this.unitData.filter((unit) => unit.unit_name === "歴代シンデレラガール");
     },
+
+    // [48万人] WONDERFUL M@GIC!! / 1st LIVE 出演アイドル
+    getWonderfulMagic() {
+      return this.unitData.filter((unit) => unit.unit_name === "WONDERFUL M@GIC!!");
+    },
     
     // (ローカル役)
     // [60万人] 9人以上 12人未満
@@ -229,10 +254,17 @@ export default {
       return this.unitData.filter((unit) => unit.members.split(',').length >= 9 && unit.members.split(',').length < 12 && unit.unit_name != "歴代シンデレラガール"); 
     },
 
-    // [48万人] WONDERFUL M@GIC!! / 歴代シンデレラガールズ 以外の 12人以上ユニット
+    // (ローカル役)
+    // [48万人] CINDERELLA PROJECT
+    getCinderellaProject() {
+      return this.unitData.filter((unit) => unit.unit_name === "CINDERELLA PROJECT");
+    },
+
+    // (ローカル役)
+    // [48万人] 歴代シンデレラガールズ、WONDERFUL M@GIC!! 以外の 12人以上ユニット
     // 例: CINDERELLA PROJECT
-    getMagicUnits() {
-      return this.unitData.filter((unit) => unit.members.split(',').length >= 12 && unit.unit_name != "歴代シンデレラガール"); 
+    getBiggerUnits() {
+      return this.unitData.filter((unit) => unit.members.split(',').length >= 12 && unit.unit_name != "歴代シンデレラガール" && unit.unit_name != "WONDERFUL M@GIC!!"); 
     },
 
     // (ローカル役)
@@ -429,20 +461,20 @@ export default {
       this.stageUnits = [];
       
       // 2人ユニット
-      const units_duo = this.getDuoUnits();
+      const duoUnits = this.getDuoUnits();
       // 5人ユニット
       const units_fivestars = this.getFiveStarUnits();
 
-      var unit_members = [];
+      var unitMembers = [];
       // デュオユニット結成フラグ
       var flag_duo_51 = false;
       var flag_duo_52 = false;
 
       for(var fivestar_unit of units_fivestars) {
         console.log("Fivestar Search")
-        unit_members = fivestar_unit.members.split(',');
+        unitMembers = fivestar_unit.members.split(',');
 
-        var isFiveStarUnit = unit_members.every(unit_member => idols.includes(unit_member));
+        var isFiveStarUnit = unitMembers.every(unitMember => idols.includes(unitMember));
         
         if(isFiveStarUnit) {
           if(!this.stageUnits.some(unitObj => unitObj === fivestar_unit)) {
@@ -450,28 +482,28 @@ export default {
           }
 
           // ユニット結成分を除外
-          idols = this.getExcludeUnitMembers(idols, unit_members);
+          idols = this.getExcludeUnitMembers(idols, unitMembers);
           
 
           // ユニット総当り検索用パターン作成
-          var temp_units = this.getCombinations(idols, 4);
-          var temp_result = [];
+          var tempUnits = this.getCombinations(idols, 4);
+          var tempResults = [];
 
-          for(var temp_unit of temp_units) {
+          for(var tempUnit of tempUnits) {
             flag_duo_51 = false;
             flag_duo_52 = false;
 
             // 2:2 で分割
-            var temp_duo = [temp_unit.slice(0,2), temp_unit.slice(2)];
+            var temp_duo = [tempUnit.slice(0,2), tempUnit.slice(2)];
             
             // 組み合わせ 1
-            for(var duo_unit of units_duo) {
-              unit_members = duo_unit.members.split(',');
-              if (unit_members.every(unit_member => temp_duo[0].includes(unit_member))) {
+            for(var duoUnit of duoUnits) {
+              unitMembers = duoUnit.members.split(',');
+              if (unitMembers.every(unitMember => temp_duo[0].includes(unitMember))) {
                 flag_duo_51 = true;
 
-                if(!this.stageUnits.some(unitObj => unitObj === duo_unit)) {
-                  this.stageUnits.push(duo_unit);
+                if(!this.stageUnits.some(unitObj => unitObj === duoUnit)) {
+                  this.stageUnits.push(duoUnit);
                 }
                 
                 break;
@@ -479,13 +511,13 @@ export default {
             }
 
             // 組み合わせ 2
-            for(var duo_unit of units_duo) {
-              unit_members = duo_unit.members.split(',');
-              if (unit_members.every(unit_member => temp_duo[1].includes(unit_member))) {
+            for(var duoUnit of duoUnits) {
+              unitMembers = duoUnit.members.split(',');
+              if (unitMembers.every(unitMember => temp_duo[1].includes(unitMember))) {
                 flag_duo_52 = true;
 
-                if(!this.stageUnits.some(unitObj => unitObj === duo_unit)) {
-                  this.stageUnits.push(duo_unit);
+                if(!this.stageUnits.some(unitObj => unitObj === duoUnit)) {
+                  this.stageUnits.push(duoUnit);
                 }
 
                 break;
@@ -496,7 +528,7 @@ export default {
               break;
             }
 
-            temp_result.push([flag_duo_51, flag_duo_52])
+            tempResults.push([flag_duo_51, flag_duo_52])
           }
 
           // 5人ユニ + 2人ユニ + 2人ユニ
@@ -508,7 +540,7 @@ export default {
           var rest_idols = this.getIdolsByNames(idols);
           
           // 5人ユニ + 2人ユニ + 2人セット
-          if(temp_result.some(values => values.includes(true))) {
+          if(tempResults.some(values => values.includes(true))) {
             if(this.checkStatusUnit(rest_idols, 2)) {
               return 36;
             } 
@@ -536,51 +568,51 @@ export default {
       this.stageUnits = [];
 
       // 4人ユニット
-      const units_quartet = this.getQuartetUnits();
+      const quartetUnits = this.getQuartetUnits();
 
       // 3人ユニット
-      const units_trio = this.getTrioUnits();
+      const trioUnits = this.getTrioUnits();
 
       // 2人ユニット
-      const units_duo = this.getDuoUnits();
+      const duoUnits = this.getDuoUnits();
 
-      var unit_members = [];
+      var unitMembers = [];
       // カルテットユニット結成フラグ
       var flag_quartet_71 = false;
       var flag_quartet_72 = false;
 
-      for(var quartet_unit of units_quartet) {
+      for(var quartetUnit of quartetUnits) {
         console.log("Quartet Search")
-        unit_members = quartet_unit.members.split(',');
-        var isQuartetUnit = unit_members.every(unit_member => idols.includes(unit_member));
+        unitMembers = quartetUnit.members.split(',');
+        var isQuartetUnit = unitMembers.every(unitMember => idols.includes(unitMember));
 
         if(isQuartetUnit) {
           // ユニット結成分を除外
-          idols = this.getExcludeUnitMembers(idols, unit_members);
+          idols = this.getExcludeUnitMembers(idols, unitMembers);
 
-          if(!this.stageUnits.some(unitObj => unitObj === quartet_unit)) {
-            this.stageUnits.push(quartet_unit);
+          if(!this.stageUnits.some(unitObj => unitObj === quartetUnit)) {
+            this.stageUnits.push(quartetUnit);
           }
 
           // 3:2 で分割、ユニット総当り検索
-          var temp_units = this.getCombinations(idols, 5);
-          var temp_result = [];
+          var tempUnits = this.getCombinations(idols, 5);
+          var tempResults = [];
 
-          for(var temp_unit of temp_units) {
+          for(var tempUnit of tempUnits) {
             flag_quartet_71 = false;
             flag_quartet_72 = false;
 
             // 3:2 で分割
-            var temp_idols = [temp_unit.slice(0,3), temp_unit.slice(3)];
+            var temp_idols = [tempUnit.slice(0,3), tempUnit.slice(3)];
 
             // 組み合わせ 1
-            for(var trio_unit of units_trio) {
-              unit_members = trio_unit.members.split(',');
-              if (unit_members.every(unit_member => temp_idols[0].includes(unit_member))) {
+            for(var trioUnit of trioUnits) {
+              unitMembers = trioUnit.members.split(',');
+              if (unitMembers.every(unitMember => temp_idols[0].includes(unitMember))) {
                 flag_quartet_71 = true;
 
-                if(!this.stageUnits.some(unitObj => unitObj === trio_unit)) {
-                  this.stageUnits.push(trio_unit);
+                if(!this.stageUnits.some(unitObj => unitObj === trioUnit)) {
+                  this.stageUnits.push(trioUnit);
                 }
                 
                 break;
@@ -588,13 +620,13 @@ export default {
             }
 
             // 組み合わせ 2
-            for(var duo_unit of units_duo) {
-              unit_members = duo_unit.members.split(',');
-              if (unit_members.every(unit_member => temp_idols[1].includes(unit_member))) {
+            for(var duoUnit of duoUnits) {
+              unitMembers = duoUnit.members.split(',');
+              if (unitMembers.every(unitMember => temp_idols[1].includes(unitMember))) {
                 flag_quartet_72 = true;
 
-                if(!this.stageUnits.some(unitObj => unitObj === duo_unit)) {
-                  this.stageUnits.push(duo_unit);
+                if(!this.stageUnits.some(unitObj => unitObj === duoUnit)) {
+                  this.stageUnits.push(duoUnit);
                 }
 
                 break;
@@ -605,7 +637,7 @@ export default {
               break;
             }
 
-            temp_result.push([flag_quartet_71, flag_quartet_72])
+            tempResults.push([flag_quartet_71, flag_quartet_72])
           }
 
           // 4人ユニ + 3人ユニ + 2人ユニ
@@ -623,14 +655,14 @@ export default {
           }
 
           // 4人ユニ + 3人ユニ + 2人セット
-          if(temp_result.some(values => values[0] === true)) {
+          if(tempResults.some(values => values[0] === true)) {
             if(this.checkStatusUnit(rest_idols, 2)) {
               return 36;
             }
           }
 
           // 4人ユニ + 3人セット + 2人ユニ
-          if(temp_result.some(values => values[1] === true)) {
+          if(tempResults.some(values => values[1] === true)) {
             // 現在結成可能な2人ユニットのリストを絞り込む
             var tempDuoUnits = this.stageUnits.filter(unitObj => unitObj.members.split(',').length == 2);
             // ユニット一覧を初期化 (2人ユニットを除外)
@@ -946,32 +978,48 @@ export default {
       return 0;
     },
 
+    // TODO: ローカル役判定を作る
+    checkLocalRules(idols) {
+      //// ローカル役
+      // 9人以上 12人未満 大型ユニット
+      const concealedUnits = this.getConcealedUnits();
+
+      // (ローカル役)         
+      // [60万人] SPライブセットA
+      // 例: Project:Krone, ETERNITY MEMORIES, EVERLASTING 
+      for(var concealedUnit of concealedUnits) {
+        var isConcealedUnit = idols.every(idol => concealedUnit.members.includes(idol));
+
+        if(isConcealedUnit) {
+          return sp_score_a;
+        }
+      }
+
+      // (ローカル役)
+      // [48万人] WONDERFUL M@GIC!! 以外の12人以上ユニット
+
+      // (ローカル役)
+      // [42万人] 7 + 2 | SPライブセットB
+      // return sp_score_b;
+
+      // (ローカル役)
+      // [42万人] 6 + 3 | SPライブセットC
+      // return sp_score_c;
+    },
+
     getScore(handIdols) {
       console.log("Call: getScore()")
 
       this.stageUnits = [];
       var idols = []
-      var almighty_idols = [];
       var fans = 0;
 
-      var useLocalRule = this.useLocalRule;
-
-      var flag_almighty_cute = false;
-      var flag_almighty_cool = false;
-      var flag_almighty_passion = false;
-
-      var sp_score_a = this.spScoreA;
-      var sp_score_b = this.spScoreB;
-      var sp_score_c = this.spScoreC;
+      var flagUseLocalRule = this.flagUseLocalRule;
 
       // 歴代シンデレラガールズ
-      const unit_cg = this.getCinderellaGirls().shift();
+      const unitCinderellaGirls = this.getCinderellaGirls().shift();
       // WONDERFUL M@GIC!! / CINDERELLA PROJECT
-      const units_magic = this.getMagicUnits();
-
-      //// ローカル役
-      // 9人以上 12人未満 大型ユニット
-      const units_concealed = this.getConcealedUnits();
+      const unit1stLive = this.getWonderfulMagic().shift();
 
       if(handIdols.length < 9) { 
         return 0;
@@ -979,72 +1027,41 @@ export default {
         if(handIdols.length == 9) {
           idols = this.getIdolNames(handIdols);
 
-          // オールマイティ抽出
-          for(var idol of handIdols) {
-            // オールマイティ以外スキップ
-            if(idol.name != "オールマイティ") {
-              continue;
-            }
-            if(idol.type == "cute") {
-              flag_almighty_cute = true;
-            }
+          // オールマイティパイ一覧
+          // var almightyIdols = [];
+          // // オールマイティ抽出
+          // for(var idol of handIdols) {
+          //   // オールマイティ以外スキップ
+          //   if(idol.name != "オールマイティ") continue;
+          //   if(idol.type == "cute") flagAlmightyCute = true;
+          //   if(idol.type == "cool") flagAlmightyCool = true;
+          //   if(idol.type == "passion") flagAlmightyPassion = true;
+          //   almightyIdols.push(idol);
+          // }
 
-            if(idol.type == "cool") {
-              flag_almighty_cool = true;
-            }
-
-            if(idol.type == "passion") {
-              flag_almighty_passion = true;
-            }
-
-            almighty_idols.push(idol);
-          }
-
-          // [4] シンデレラガールズ ユニット
-          var isAllCG = idols.every(idol => unit_cg.members.includes(idol));
-
-          if(isAllCG) {
+          // [4] シンデレラガールズ
+          if(idols.every(idol => unitCinderellaGirls.members.includes(idol))) {
+            this.liveStartPatternName = "シンデレラガールズ";
+            this.stageUnits.push(unitCinderellaGirls);
             return 60;
           }
 
-          // [5] WONDERFUL M@GIC!! ユニット / CINDERELLA PROJECT
-          for(var magic_unit of units_magic) {
-            console.log("WONDERFUL M@GIC Search")
-            var isMagicUnit = idols.every(idol => magic_unit.members.includes(idol));
-            
-            if(isMagicUnit) {
-              return 48;
-            }
+          // [5] WONDERFUL M@GIC!!
+          if(idols.every(idol => unit1stLive.members.includes(idol))) {
+            this.liveStartPatternName = "シンデレラガールズ";
+            this.stageUnits.push(unit1stLive);
+            return 48;
           }
           
           // ローカル役チェック
-          if(useLocalRule) {
-            // (ローカル役)         
-            // [60万人] SPライブセットA
-            // 例: Project:Krone, ETERNITY MEMORIES, EVERLASTING 
-            for(var concealed_unit of units_concealed) {
-              var isConcealedUnit = idols.every(idol => concealed_unit.members.includes(idol));
+          if(flagUseLocalRule) fans = this.checkLocalRules(idols);
 
-              if(isConcealedUnit) {
-                return sp_score_a;
-              }
-            }
-
-            // (ローカル役)
-            // [42万人] 7 + 2 | SPライブセットB
-            // return sp_score_b;
-
-
-            // (ローカル役)
-            // [42万人] 6 + 3 | SPライブセットC
-            // return sp_score_c;
-          }
-          
           // [6] 5スターユニット
           // return 36;
           // 5人ユニット + (2人ユニット or 2個セット) * 2
           fans = this.checkFiveStarUnits(idols);
           if (fans > 0) {
+            this.liveStartPatternName = "5スターユニット";
             return fans;
           } else {
             // 初期化
@@ -1062,15 +1079,13 @@ export default {
             this.stageUnits = [];
           }
 
-          // [8] トリコロールユニット
-          // return 24;
-          // 各タイプ それぞれで 3人ユニット
-
-          // [9] ノーマルライブユニット
-          // return 12;
-          // (3人ユニット) + (3人ユニット or 3個セット) * 2
+          // [8] トリコロールユニット        / [9] ノーマルライブユニット
+          // return 24;                      / return 12;
+          // 各タイプ それぞれで 3人ユニット / (3人ユニット) + (3人ユニット or 3個セット) * 2
           fans = this.checkTrioUnit(idols);
           if (fans > 0) {
+            if(fans == 24) this.liveStartPatternName = "トリコロールユニット";
+            if(fans == 12) this.liveStartPatternName = "ノーマルライブユニット";
             return fans;
           } else {
             // 初期化
@@ -1083,6 +1098,7 @@ export default {
           // ※2つ以上のユニットが必要
           fans = this.checkStartDashUnit(idols);
           if (fans > 0) {
+            this.liveStartPatternName = "スタートダッシュライブユニット";
             return fans;
           } else {
             // 初期化
@@ -1090,44 +1106,42 @@ export default {
           }
 
           // 手牌の各属性・各ステータスのアイドルを抽出
-          // Cute - Vi Da Vo
-          var handsCuVi = this.getFilteredHands(handIdols, "cute", "Vi");
-          var handsCuDa = this.getFilteredHands(handIdols, "cute", "Da");
-          var handsCuVo = this.getFilteredHands(handIdols, "cute", "Vo");
-
-          // Cool - Vi Da Vo
-          var handsCoVi = this.getFilteredHands(handIdols, "cool", "Vi");
-          var handsCoDa = this.getFilteredHands(handIdols, "cool", "Da");
-          var handsCoVo = this.getFilteredHands(handIdols, "cool", "Vo");
-          
-          // Passion - Vi Da Vo
-          var handsPaVi = this.getFilteredHands(handIdols, "passion", "Vi");
-          var handsPaDa = this.getFilteredHands(handIdols, "passion", "Da");
-          var handsPaVo = this.getFilteredHands(handIdols, "passion", "Vo");
+          var filteredHands = this.getFilteredHandsArray(handIdols);
 
           // 各属性の3枚セットのセット数を抽出
+          const value = 3;
+
           // Cute
           var setCuVi, setCuDa, setCuVo = 0;
-          setCuVi = handsCuVi.length % 3 == 0 ? handsCuVi.length / 3 : 0
-          setCuDa = handsCuDa.length % 3 == 0 ? handsCuDa.length / 3 : 0
-          setCuVo = handsCuVo.length % 3 == 0 ? handsCuVo.length / 3 : 0
+          setCuVi = filteredHands[0].length % value == 0 ? filteredHands[0].length / value : 0
+          setCuDa = filteredHands[1].length % value == 0 ? filteredHands[1].length / value : 0
+          setCuVo = filteredHands[2].length % value == 0 ? filteredHands[2].length / value : 0
 
           // Cool
           var setCoVi, setCoDa, setCoVo = 0;
-          setCoVi = handsCoVi.length % 3 == 0 ? handsCoVi.length / 3 : 0
-          setCoDa = handsCoDa.length % 3 == 0 ? handsCoDa.length / 3 : 0
-          setCoVo = handsCoVo.length % 3 == 0 ? handsCoVo.length / 3 : 0
+          setCoVi = filteredHands[3].length % value == 0 ? filteredHands[3].length / value : 0
+          setCoDa = filteredHands[4].length % value == 0 ? filteredHands[4].length / value : 0
+          setCoVo = filteredHands[5].length % value == 0 ? filteredHands[5].length / value : 0
 
           // Passion
           var setPaVi, setPaDa, setPaVo = 0;
-          setPaVi = handsPaVi.length % 3 == 0 ? handsPaVi.length / 3 : 0
-          setPaDa = handsPaDa.length % 3 == 0 ? handsPaDa.length / 3 : 0
-          setPaVo = handsPaVo.length % 3 == 0 ? handsPaVo.length / 3 : 0
+          setPaVi = filteredHands[6].length % value == 0 ? filteredHands[6].length / value : 0
+          setPaDa = filteredHands[7].length % value == 0 ? filteredHands[7].length / value : 0
+          setPaVo = filteredHands[8].length % value == 0 ? filteredHands[8].length / value : 0
 
           // [1] Cute / Cool / Passion アンサンブルセット
           var setCounts = [setCuVi, setCuDa, setCuVo, setCoVi, setCoDa, setCoVo, setPaVi, setPaDa, setPaVo];
+          console.log(setCounts);
 
           if(setCounts.some(count => count === 3)) {
+            const ensembleIndex = setCounts.indexOf(3);
+            console.log(ensembleIndex)
+            if(ensembleIndex >= 0 && 3 > ensembleIndex) this.liveStartPatternName = "Cute アンサンブルセット";
+            if(ensembleIndex >= 3 && 6 > ensembleIndex) this.liveStartPatternName = "Cool アンサンブルセット";
+            if(ensembleIndex >= 6 && 9 > ensembleIndex) this.liveStartPatternName = "Passion アンサンブルセット";
+
+            var generic_unit = this.getGenericUnitData(ensembleIndex, filteredHands[ensembleIndex]);
+            this.stageUnits.push(generic_unit);
             return 42;
           }
 
@@ -1137,6 +1151,16 @@ export default {
           var passionSymphony = setPaVi + setPaDa + setPaVo;
 
           if(cuteSymphony == 3 || coolSymphony == 3 || passionSymphony == 3) {
+            if(cuteSymphony === 3) this.liveStartPatternName = "Cute シンフォニーセット";
+            if(coolSymphony === 3) this.liveStartPatternName = "Cool シンフォニーセット";
+            if(passionSymphony === 3) this.liveStartPatternName = "Passion シンフォニーセット";
+
+            const resultIndexes = setCounts.flatMap((s, i) => (s === 1 ? i : []));
+            for(var resultIndex of resultIndexes) {
+              var generic_unit = this.getGenericUnitData(resultIndex, filteredHands[resultIndex]);
+              this.stageUnits.push(generic_unit);
+            }
+
             return 24;
           }
 
@@ -1144,19 +1168,27 @@ export default {
           var rehearsal_set = cuteSymphony + coolSymphony + passionSymphony;
 
           if(rehearsal_set == 3) {
+            this.liveStartPatternName = "リハーサルライブセット";
+
+            const resultIndexes = setCounts.flatMap((s, i) => (s === 1 ? i : []));
+            for(var resultIndex of resultIndexes) {
+              var generic_unit = this.getGenericUnitData(resultIndex, filteredHands[resultIndex]);
+              this.stageUnits.push(generic_unit);
+            }
+
             return 3;
           }
         }
 
         return 0;
       }
-    }
-  },
-  watch: {
-    // 点数計算
-    handIdols:function(handIdols, produceIdol) {
+    },
+
+    getScoreWithProduceIdol(handIdols, produceIdol) {
       if(handIdols.length < 9) { 
-        return 0;
+        // 初期化
+        if(this.stageUnits.length > 0) this.stageUnits = [];
+        if(this.stageUnits.length > 0) this.stageUnits = [];
       } else {
         var idols = [];
         const score = this.getScore(handIdols);
@@ -1167,10 +1199,22 @@ export default {
 
         if(idols.some(idol => idol === produceIdol.name)) {
           this.score = score * 2;
+          this.flagProduceBonus = true;
         } else {
           this.score = score;
+          this.flagProduceBonus = false;
         }
       }
+    }
+  },
+  watch: {
+    // 手牌一覧が更新された時
+    handIdols:function(handIdols) {
+      this.getScoreWithProduceIdol(handIdols, this.produceIdol);
+    },
+    // 担当アイドルが更新された時
+    produceIdol:function(produceIdol) {
+      this.getScoreWithProduceIdol(this.handIdols, produceIdol);
     }
   }
 }
@@ -1178,16 +1222,123 @@ export default {
 
 <template>
   <div class="module-wrapper">
-    {{ produceIdol }}
-    <br>
-    <!-- {{ getCuteTrioUnits() }} -->
-    <br>
-    <!-- {{ getScoreWithProduceIdol(handIdols, produceIdol) }} -->
-    
-    {{ score }}
-    <br>
-    <!-- {{ getCinderellaGirls }} -->
-    <br>
-    {{ stageUnits }}
+    <div class="container">
+      <div class="container-title">
+        <p class="text">計算結果</p>
+      </div>
+
+      <!-- 担当アイドル -->
+      <div class="produce-idol">
+          <div class="component">
+            <template v-if="Object.keys(produceIdol).length > 0">
+              <div class="idol-card">
+                <div class="idol-detail" :data-type="produceIdol.type">
+                  <p>担当アイドル</p>
+
+                  <div class="idol-image">
+                    <img :src="'../images/' + produceIdol.image" width="140" height="190" v-if="produceIdol != undefined">
+                  </div>
+
+                  <p class="idol-furigana">{{ produceIdol.furigana }}</p>
+                  <p class="idol-name">{{ produceIdol.name }}</p>
+                </div>
+              </div>
+            </template>
+        
+            <template v-if="Object.keys(produceIdol).length === 0">
+              <div class="idol-card">
+                <div class="idol-detail" :data-type="produceIdol.type">
+                  <p>担当アイドル</p>
+                  
+                  <div class="idol-image">
+                    <img :src="'../images/0000.png'" width="140" height="190" v-if="produceIdol != undefined">
+                  </div>
+
+                  <!-- <p class="idol-furigana">{{ produceIdol.furigana }}</p> -->
+                  <!-- <p class="idol-name">{{ produceIdol.name }}</p> -->
+                  <p class="text">担当アイドルが選択されていません。</p>
+                </div>
+              </div>
+            </template>
+          </div>
+        </div>
+
+      <!-- 点数 (ファン人数) -->
+      <div class="live-points" v-if="score === 0">
+        <p class="fans">ライブを始める準備が整っていません…。</p>
+      </div>
+
+      <div class="live-points" v-if="score > 0" style="display: flex; flex-direction: column;">
+        <p class="fans" style="margin-bottom: 20px">{{ score }} 万人</p>
+        <p class="pattern-name">{{ liveStartPatternName }}</p>
+        <p class="pattern-points" v-if="!flagProduceBonus">({{ score }} 万人)</p>
+        <p class="pattern-points" v-if="flagProduceBonus">({{ score / 2 }} 万人)</p>
+      </div>
+
+      <div class="produce-bonus" v-if="!flagProduceBonus">
+        <p class="text"></p>
+      </div>
+      <div class="produce-bonus" v-if="flagProduceBonus">
+        <p class="text">担当アイドルが含まれているため、<br>得点が2倍になります。</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="module-wrapper" v-if="stageUnits.length > 0">
+    <div class="container">
+      <div class="container-title">
+        <p class="text">今回のライブで登場したユニット一覧</p>
+      </div>
+
+      <div class="component">
+        <div class="unit-info" v-for="(unit, key) in stageUnits" :key="key">
+          <div class="unit-detail">
+            <p class="unit-furigana">{{ unit.yomi }}</p>
+            <p class="unit-name">{{ unit.unit_name }}</p>
+            <p class="song-unit" v-if="unit.song">※楽曲ユニット</p>
+          </div>
+          <div class="unit-members">
+            <div class="idol-card" v-for="(idol, key) in getIdolsByNames(unit.members.split(','))" :key="key">
+              <div class="idol-detail" :data-type="idol.type">
+                <div class="idol-image">
+                  <img :src="'../images/' + idol.image" width="140" height="190" >
+                </div>
+
+                <p class="idol-furigana">{{ idol.furigana }}</p>
+                <p class="idol-name">{{ idol.name }}</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
   </div>
 </template>
+
+<style scoped lang="scss">
+.container {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  align-items: center;
+
+  .container-title {
+    width: 100%;
+  }
+  
+  .produce-idol, .live-points, .produce-bonus {
+    width: calc(100% / 3);
+  }
+
+  .produce-idol {
+    .component {
+      .idol-card {
+        .idol-detail {
+          border-radius: 15px;
+        }
+      }
+    }
+  }
+}
+
+</style>
